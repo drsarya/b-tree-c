@@ -1,7 +1,7 @@
 #include "Tree.h"
 #include "Node.cpp"
 #include <iostream>
- 
+
 template<class  T >
 Tree<T>::Tree(int weight)
 {
@@ -35,7 +35,12 @@ bool Tree<T>::search(T value)
 template<class  T >
 void Tree<T>::deleteKey(T value)
 {
+	findNode = nullptr;
 	searchNode(value, root, false);
+	if (findNode == nullptr) {
+		std::cout << "Элемент " << value << " не найден " << endl;
+	}
+
 }
 template<class  T >
 void Tree<T>::walker(Node<T>* node, T value)
@@ -77,8 +82,8 @@ void Tree<T>::check(vector<T> keys, Node<T>* currentNode)
 		Node<T>* childLeft = new Node<T>();
 		Node<T>* childRight = new Node<T>();
 		int half = keys.size() / 2;
-		vector<int> vl(keys.begin(), keys.begin() + half);
-		vector<int> vr(keys.begin() + half + 1, keys.end());
+		vector<T> vl(keys.begin(), keys.begin() + half);
+		vector<T> vr(keys.begin() + half + 1, keys.end());
 		childLeft->addKey(vl);
 		childRight->addKey(vr);
 		if (currentNode->getChildren().size() > 0) {
@@ -120,39 +125,33 @@ void Tree<T>::searchNode(T value, Node<T>* node, bool search)
 			}
 		}
 		else if (value == node->getKeys().at(i)) {
-			if (search) {
-				findNode = node;
+			findNode = node;
+			if (!search) {
 
-			}
-			else {
 				if (node->getParent() == nullptr && node->getKeys().size() == 1 && node->getChildren().size() == 0)
 					return;
 				checkState(node, value);
 			}
 			return;
-
 		}
 	}
 }
 template<class  T >
 void Tree<T>::checkState(Node<T>* node, T value)
 {
-	if (node == nullptr) {
-		std::cout << "Элемент не найден" << endl;
+
+	if (node->getChildren().size() == 0) {
+		//лист
+		int index = node->getIndexFromKeys(value);
+		(*(node->getlinkKeys())).erase((*(node->getlinkKeys())).begin() + index);
+		if (node->getKeys().size() == 0) {
+			checkNearNodes(node);
+		}
 	}
 	else {
-		if (node->getChildren().size() == 0) {
-			//лист
-			int index = node->getIndexFromKeys(value);
-			(*(node->getlinkKeys())).erase((*(node->getlinkKeys())).begin() + index);
-			if (node->getKeys().size() == 0) {
-				checkNearNodes(node);
-			}
-		}
-		else {
-			//центральный
-			merge(node, value);
-		}
+		//центральный
+		merge(node, value);
+
 	}
 }
 template<class  T >
@@ -206,7 +205,7 @@ void Tree<T>::checkNearNodes(Node<T>* node)
 		//set new value for current node
 		node->addKey(parent->getKeys().at(index - 1));
 		Node<T>* leftChild = parent->getChild(index - 1);
-		int maxValueOfLeftChild = leftChild->getKeys().at(leftChild->getKeys().size() - 1);
+		T maxValueOfLeftChild = leftChild->getKeys().at(leftChild->getKeys().size() - 1);
 		//  parent->getKeys().set(index - 1, maxValueOfLeftChild);
 		parent->getKeys().at(index - 1) = maxValueOfLeftChild;
 		//delete key from left brother
@@ -223,7 +222,7 @@ void Tree<T>::checkNearNodes(Node<T>* node)
 		node->addKey(parent->getKeys().at(index));
 		Node<T>* rightChild = parent->getChild(index + 1);
 
-		int minValueOfRightChild = rightChild->getKeys().at(0);
+		T minValueOfRightChild = rightChild->getKeys().at(0);
 		//set new value for parent
 		parent->getKeys().at(index) = minValueOfRightChild;
 		//parent->getKeys().set(index, minValueOfRightChild);

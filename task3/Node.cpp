@@ -1,5 +1,5 @@
 #include "Node.h"
- 
+
 #include <algorithm>  // sort
 #include <vector>   
 using namespace std;
@@ -52,7 +52,7 @@ template<class  T>
 int Node<T> ::getIndexFromParent(Node<T>* node) {
 	return Node<T> ::getIndexFromNode(getChildren(), node);
 }
- 
+
 template<class  T>
 int Node<T> ::getIndexFromNode(vector<Node<T>* > v, Node<T>* value)
 {
@@ -84,13 +84,13 @@ template<class  T>
 void Node<T> ::addChild(Node<T>* listNodes) {
 	listNodes->parent = this;
 	children.push_back(listNodes);
-	  sort(children.begin(), children.end(), comp<T>);
+	sort(children.begin(), children.end(), comp<T>);
 }
 
 template<class  T>
 void Node<T> ::addKey(vector<T> value) {
 
-	for (int n : value) {
+	for (T n : value) {
 		keys.push_back(n);
 	}
 	sort(keys.begin(), keys.end());
@@ -120,7 +120,7 @@ void Node<T> ::removeChild(vector<T> keys) {
 	for (int i = 0; i < getChildren().size(); i++) {
 		if (getChildren().at(i)->keys.size() == keys.size() && containsAll(children.at(i)->keys, keys)) {
 
-			typename 	vector< Node<T>*>::  iterator  pos = children.begin() + i;
+			typename 	vector< Node<T>*>::iterator  pos = children.begin() + i;
 			children.erase(pos);
 			break;
 		}

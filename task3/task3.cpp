@@ -7,44 +7,26 @@
 
 int main()
 {
-	Tree<int>* tree = new Tree<int>(4);
-	 Printer<int>* p = new Printer<int>();
-	tree->add(1);
- 
-	tree->add(2);
-	tree->add(3);
-	tree->add(4);
-	 
-	tree->add(5);
-	tree->add(6);
-	tree->add(7);
-	tree->add(8);
-	tree->add(9);
-	tree->add(10);
-	tree->add(11);
-	tree->add(12);  
-	tree->add(13);
-	tree->add(14);
-	tree->add(15);
-	tree->add(16);
-	tree->add(7);
-	tree->add(9);
-	tree->add(19);
-	tree->add(20);
-	tree->add(21);
-	tree->add(22);
-	tree->add(23);
-	tree->add(24);
- 	p->printTree(tree);
-
+	setlocale(LC_ALL, "Russian");
+	Tree<string>* tree = new Tree<string>(4);
+	Printer<string>* p = new Printer<string>();
+	tree->add("a");
+	tree->add("b");
+	tree->add("c");
+	tree->add("d");
+	tree->add("e");
+	tree->add("a");
+	tree->add("b");
+	tree->add("c");
+	tree->add("d");
+	tree->add("e");
+	p->printTree(tree);
 	std::cout << "\n";
-	tree->deleteKey(9);
-	tree->deleteKey(1);
-	tree->deleteKey(4);
-	tree->deleteKey(11);
-	tree->deleteKey(12);
-//	p->printTree(tree);
-	  p->printTree(tree);
+	tree->deleteKey("a");
+	tree->deleteKey("a");
+	tree->deleteKey("a");
+	p->printTree(tree);
+
 
 	std::cout << "Hello World!\n";
 }
