@@ -1,31 +1,32 @@
 #pragma once
 #include <vector>  
 using namespace std;
- 
+template<class T >
 class Node {
-	 
+ 
 private:
-	vector<int> keys; 
-	vector<Node*> children; 
-	Node* parent;
+	vector<T> keys;
+	vector<Node*> children;
+	Node<T>* parent;
 public:
 	Node();
-	void setParent(Node* parent);
-	Node* getParent();
-	vector<int> getKeys();
- 
-	vector<Node*> getChildren();
-	Node* getChild(int index);
+	void setParent(Node<T>* parent);
+	Node<T>* getParent();
+	vector<T> getKeys();
+	vector<T>* getlinkKeys();
+	vector<Node<T>*> getChildren();
+	Node<T>* getChild(int index);
 	void addChildren(vector<Node*> listNodes);
-	int getIndexFromParent(Node* node);
-	int getIndexFromKeys(int value);
-	void addChild(Node* listNodes);
-	void addKey(vector<int> value);
-	void addKey(int value);
-	void removeChild(vector<int> keys);
-	void  addChildren(Node* childOne, Node* childTwo);
+	int getIndexFromParent(Node<T>* node);
+
+	int getIndexFromKeys(T value);
+	void addChild(Node<T>* listNodes);
+	void addKey(vector<T> value);
+	void addKey(T value);
+	void removeChild(vector<T> keys);
+	void  addChildren(Node<T>* childOne, Node<T>* childTwo);
 	void removeChild(int index);
 	void removeKey(int index);
-	template<class  T>
 	int getIndexOf(vector<T >, T  value);
+ int getIndexFromNode(vector<Node<T>* > v, Node<T>* value);
 };

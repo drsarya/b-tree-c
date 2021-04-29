@@ -4,12 +4,12 @@
 #include <iostream>
  
 using namespace std;
-
-Printer::Printer()
+template<class T>
+Printer<T>::Printer()
 {
 }
-
-void Printer::printTree(Tree* tree)
+template<class T>
+void Printer<T>::printTree(Tree<T> * tree)
 {
 	vector<string> levels = {};
 	nodes = {};
@@ -24,11 +24,11 @@ void Printer::printTree(Tree* tree)
 		std::cout << level << endl;
 	}
 }
-
-string Printer::levelTreeToString(vector<Node*> nodes)
+template<class T>
+string Printer<T>::levelTreeToString(vector<Node<T>*> nodes)
 {
 	string commonParent;
-	for (Node* node : nodes) {
+	for (Node<T>* node : nodes) {
 		for (int j = 0; j < (int)(node->getChildren().size()); j++) {
 			commonParent.append(takeNodeVisual( node->getChildren().at(j)->getKeys()));
 		}
@@ -36,11 +36,11 @@ string Printer::levelTreeToString(vector<Node*> nodes)
 	}
 	return commonParent;
 }
- 
-void Printer::walker(Node* node)
+template<class T>
+void Printer<T>::walker(Node<T>* node)
 {
 	if (nodes.size() == levels) {
-		vector<Node*> aa = vector<Node*>();
+		vector<Node<T>*> aa = vector<Node<T>*>();
 		nodes.insert(nodes.begin()+levels, aa);
 	}
 	nodes.at(levels).push_back(node);
@@ -50,11 +50,13 @@ void Printer::walker(Node* node)
 		levels--;
 	}
 }
-string Printer::takeNodeVisual(vector<int> keys)
+template<class T>
+string Printer<T>::takeNodeVisual(vector<T> keys)
 {
 	return "|" + getKeysAsAString(keys) + "| ";
 }
-string Printer::getKeysAsAString(vector<int> keys)
+template<class T>
+string Printer<T>::getKeysAsAString(vector<T> keys)
 {
 	string s;
 	for (int i = 0; i < (int)(keys.size()); i++) {

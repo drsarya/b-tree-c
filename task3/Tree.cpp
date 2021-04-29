@@ -1,42 +1,44 @@
 #include "Tree.h"
+#include "Node.cpp"
 #include <iostream>
  
-Tree::Tree(int weight)
+template<class  T >
+Tree<T>::Tree(int weight)
 {
 	this->weight = weight;
 }
 
 
-
-Node* Tree::getRoot()
+template<class  T >
+Node<T>* Tree<T>::getRoot()
 {
 	return root;
 }
-
-void Tree::add(int value)
+template<class  T >
+void Tree<T>::add(T value)
 {
 	if (root == nullptr) {
-		root = new Node();
+		root = new Node<T>();
 		root->addKey(value);
 	}
 	else {
 		walker(root, value);
 	}
 }
-
-bool Tree::search(int value)
+template<class  T >
+bool Tree<T>::search(T value)
 {
 	findNode = nullptr;
 	searchNode(value, root, true);
 	return findNode != nullptr;
 }
-
-void Tree::deleteKey(int value)
+template<class  T >
+void Tree<T>::deleteKey(T value)
 {
 	searchNode(value, root, false);
 }
-
-void Tree::walker(Node* node, int value)
+template<class  T >
+void Tree<T>::walker(Node<T>* node, T value)
 {
 	for (int i = 0; i < node->getKeys().size(); i++) {
 		if (value <= node->getKeys().at(i) || value >= node->getKeys().at(i) && (node->getKeys().size() - i == 1 || value <= node->getKeys().at(i + 1))) {
@@ -57,17 +59,23 @@ void Tree::walker(Node* node, int value)
 	}
 }
 template<class  T >
-vector<T*  >  Tree::subList(vector<T* > v, int  start, int end)
+vector<Node<T>*  >  Tree<T >::subList(vector<Node<T>* > v, int  start, int end)
 {
-	vector<T* >  result = vector<T* >(v.begin() + start, v.begin() + end);
+	vector<Node<T>* >  result = vector<Node<T>* >(v.begin() + start, v.begin() + end);
 	return result;
 }
-
-void Tree::check(vector<int> keys, Node* currentNode)
+template<class  T  >
+vector<T   >  Tree<T>::subList(vector<T  > v, int  start, int end)
+{
+	vector<T  >  result = vector<T  >(v.begin() + start, v.begin() + end);
+	return result;
+}
+template<class  T >
+void Tree<T>::check(vector<T> keys, Node<T>* currentNode)
 {
 	if (keys.size() > weight - 1) {
-		Node* childLeft = new Node();
-		Node* childRight = new Node();
+		Node<T>* childLeft = new Node<T>();
+		Node<T>* childRight = new Node<T>();
 		int half = keys.size() / 2;
 		vector<int> vl(keys.begin(), keys.begin() + half);
 		vector<int> vr(keys.begin() + half + 1, keys.end());
@@ -78,7 +86,7 @@ void Tree::check(vector<int> keys, Node* currentNode)
 			childRight->addChildren(subList(currentNode->getChildren(), half + 1, currentNode->getChildren().size()));
 		}
 		if (currentNode->getParent() == nullptr) {
-			Node* n = new Node();
+			Node<T>* n = new Node<T>();
 			n->addKey(keys.at(half));
 			n->addChildren(childLeft, childRight);
 			root = n;
@@ -91,8 +99,8 @@ void Tree::check(vector<int> keys, Node* currentNode)
 		}
 	}
 }
-
-void Tree::searchNode(int value, Node* node, bool search)
+template<class  T >
+void Tree<T>::searchNode(T value, Node<T>* node, bool search)
 {
 	for (int i = 0; i < node->getKeys().size(); i++) {
 		if (value < node->getKeys().at(i)
@@ -126,8 +134,8 @@ void Tree::searchNode(int value, Node* node, bool search)
 		}
 	}
 }
-
-void Tree::checkState(Node* node, int value)
+template<class  T >
+void Tree<T>::checkState(Node<T>* node, T value)
 {
 	if (node == nullptr) {
 		std::cout << "Элемент не найден" << endl;
@@ -136,9 +144,7 @@ void Tree::checkState(Node* node, int value)
 		if (node->getChildren().size() == 0) {
 			//лист
 			int index = node->getIndexFromKeys(value);
-			auto a =  node->getKeys() ;
-			auto s = node->getKeys().begin();
-			a.erase(node->getKeys().begin()+index)  ;
+			(*(node->getlinkKeys())).erase((*(node->getlinkKeys())).begin() + index);
 			if (node->getKeys().size() == 0) {
 				checkNearNodes(node);
 			}
@@ -149,13 +155,13 @@ void Tree::checkState(Node* node, int value)
 		}
 	}
 }
-
-void Tree::merge(Node* node, int value)
+template<class  T >
+void Tree<T>::merge(Node<T>* node, T value)
 {
 	int index = node->getIndexFromKeys(value);
 	node->removeKey(index);
-	Node* childLeft = node->getChild(index);
-	Node* childRight = node->getChild(index + 1);
+	Node<T>* childLeft = node->getChild(index);
+	Node<T>* childRight = node->getChild(index + 1);
 	childLeft->addKey(childRight->getKeys());
 	//Добавление детей в левый нод
 	int lastSize = -1;
@@ -182,10 +188,10 @@ void Tree::merge(Node* node, int value)
 		checkNearNodes(childLeft->getParent());
 	}
 }
-
-void Tree::checkNearNodes(Node* node)
+template<class  T >
+void Tree<T>::checkNearNodes(Node<T>* node)
 {
-	Node* parent = node->getParent();
+	Node<T>* parent = node->getParent();
 	if (parent == nullptr) {
 		node->getChild(0)->setParent(nullptr);
 		root = node->getChild(0);
@@ -199,7 +205,7 @@ void Tree::checkNearNodes(Node* node)
 		//если у левого ребенка ключей больше минимального
 		//set new value for current node
 		node->addKey(parent->getKeys().at(index - 1));
-		Node* leftChild = parent->getChild(index - 1);
+		Node<T>* leftChild = parent->getChild(index - 1);
 		int maxValueOfLeftChild = leftChild->getKeys().at(leftChild->getKeys().size() - 1);
 		//  parent->getKeys().set(index - 1, maxValueOfLeftChild);
 		parent->getKeys().at(index - 1) = maxValueOfLeftChild;
@@ -215,7 +221,7 @@ void Tree::checkNearNodes(Node* node)
 		//если у правого ребенка ключей больше минимального
 		//set new value for current node
 		node->addKey(parent->getKeys().at(index));
-		Node* rightChild = parent->getChild(index + 1);
+		Node<T>* rightChild = parent->getChild(index + 1);
 
 		int minValueOfRightChild = rightChild->getKeys().at(0);
 		//set new value for parent
@@ -232,7 +238,7 @@ void Tree::checkNearNodes(Node* node)
 	else {
 		//поделиться ключом некому
 		//спускаем парент - мержим
-		Node* n = new Node();
+		Node<T>* n = new Node<T>();
 		n->addChildren(node->getChildren());
 		if (index == 0) {
 			n->addChildren(parent->getChild(index + 1)->getChildren());

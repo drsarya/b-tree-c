@@ -2,13 +2,13 @@
 //
 
 #include <iostream>
-#include "Printer.h"
-
+#include "Printer.cpp"
+#include "Tree.cpp"
 
 int main()
 {
-	Tree* tree = new Tree(4);
-	Printer* p = new Printer();
+	Tree<int>* tree = new Tree<int>(4);
+	 Printer<int>* p = new Printer<int>();
 	tree->add(1);
  
 	tree->add(2);
@@ -35,7 +35,7 @@ int main()
 	tree->add(22);
 	tree->add(23);
 	tree->add(24);
-	p->printTree(tree);
+ 	p->printTree(tree);
 
 	std::cout << "\n";
 	tree->deleteKey(9);
@@ -43,8 +43,8 @@ int main()
 	tree->deleteKey(4);
 	tree->deleteKey(11);
 	tree->deleteKey(12);
-	p->printTree(tree);
-	//  p->printTree(tree);
+//	p->printTree(tree);
+	  p->printTree(tree);
 
 	std::cout << "Hello World!\n";
 }
